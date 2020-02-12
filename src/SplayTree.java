@@ -1,37 +1,35 @@
-class BinaryNode<V extends Comparable<V>>{
-    V value;
-    Comparable key;     // данные в узле
-    BinaryNode left;    // левый
-    BinaryNode right;   // правый
+class BinaryNode<T extends  Comparable<T>>{
+    T key;     // данные в узле
+    BinaryNode<T> left;    // левый
+    BinaryNode<T> right;   // правый
 
-    BinaryNode (Comparable k){
+    BinaryNode (T k){
         key = k;
         left = right = null;
     }
 }
 
 public class SplayTree<T extends Comparable<T>> {
-    private BinaryNode root;
+    private BinaryNode<T> root;
 
 
-    private SplayTree(){
+    public SplayTree(){
         root = null;
     }
 
 
-    public void insert (Comparable<T> key){
+    public void insert (T key){
         BinaryNode n;
         int c;
         if (root == null) {
-            root = new BinaryNode(key);
+            root = new BinaryNode<>(key);
             return;
         }
         splay(key);
-        if ((c = key.compareTo((T) root.key)) == 0) {
-
+        if ((c = key.compareTo(root.key)) == 0) {
             return;
         }
-        n = new BinaryNode(key);
+        n = new BinaryNode<>(key);
         if (c < 0) {
             n.left = root.left;
             n.right = root;
@@ -45,10 +43,10 @@ public class SplayTree<T extends Comparable<T>> {
     }
 
 
-    void remove(Comparable<T> key){
+    void remove(T key){
         BinaryNode n;
         splay(key);
-        if (key.compareTo((T) root.key)!= 0){
+        if (key.compareTo(root.key)!= 0){
             return;                             // Не найдено
         }
         if (root.left == null){
@@ -61,53 +59,51 @@ public class SplayTree<T extends Comparable<T>> {
         }
     }
 
-    public Comparable find(Comparable<T> key) {
+    public Comparable find(T key) {
         if (isEmpty()) return null;
         splay(key);
         if(root.key.compareTo(key) != 0) return null;
         return root.key;
     }
 
-    public Comparable findMin() {
-        BinaryNode r = root;
+    public T findMin() {
+        BinaryNode<T> r = root;
         if (isEmpty()) return null;
         while (r.left != null)
             r = r.left;
-        splay(r.key);
         return r.key;
     }
-    public Comparable findMax() {
-        BinaryNode r = root;
+    public T findMax() {
+        BinaryNode<T> r = root;
         if (isEmpty()) return null;
         while (r.right != null)
             r = r.right;
-        splay(r.key);
         return r.key;
     }
 
 
-    public boolean contains (Comparable<T> key){
+    public boolean  contains (T key){
         if (isEmpty()) return false;
         splay(key);
-        return key.compareTo((T) root.key) == 0;
+        return key.compareTo(root.key) == 0;
     }
 
-    private boolean isEmpty(){
+    public boolean isEmpty(){
         return root == null;
     }
 
 
-    private static BinaryNode head = new BinaryNode(null);
+    private  BinaryNode<T> head = new BinaryNode<>(null);
 
-    private void  splay(Comparable<T> key){
-        BinaryNode t, r, l, s;
+    public void  splay(T key){
+        BinaryNode<T> t, r, l, s;
         l = r = head;
         t = root; 
         head.left = head.right = null;
         for (;;){
-            if (key.compareTo((T) t.key) < 0){
+            if (key.compareTo(t.key) < 0){
                 if (t.left == null) break;
-                if(key.compareTo((T) t.left.key) < 0){
+                if(key.compareTo(t.left.key) < 0){
                     s = t.left;                              // перемещение вправо
                     t.left = s.right;
                     s.right = t;
@@ -117,9 +113,9 @@ public class SplayTree<T extends Comparable<T>> {
                 r.left = t;                                  // ссылка на правую
                 r = t;
                 t = t.left;
-            }else if (key.compareTo((T) t.key) > 0){
+            }else if (key.compareTo( t.key) > 0){
                 if (t.right == null) break;
-                if (key.compareTo((T) t.right.key) > 0){
+                if (key.compareTo(t.right.key) > 0){
                     s = t.right;                              // перемещение влево
                     t.right = s.left;
                     s.left = t;
@@ -140,23 +136,7 @@ public class SplayTree<T extends Comparable<T>> {
         root = t;
     }
 
-    public static void main(String[] args) {
-        SplayTree t = new SplayTree();
-        t.root= new  BinaryNode(8);
-        t.root.left = new BinaryNode(3);
-        t.root.left.right =new BinaryNode(4);
-        t.root.left.right.right = new BinaryNode(6);
-        t.root.left.right.right.left = new BinaryNode(5);
-        t.root.left.right.right.right = new BinaryNode(7);
-        t.root.right= new BinaryNode(10);
-        t.root.right.right = new BinaryNode(11);
-        t.root.right.right.right = new BinaryNode(12);
-        t.root.right.right.right.right = new BinaryNode(15);
-        t.root.right.right.right.right.right = new BinaryNode(17);
-        t.root.right.right.right.right.left = new BinaryNode(13);
-        t.root.right.right.right.right.left.right = new BinaryNode(14);
-        t.splay(14);
-        System.out.println();
-    }
+
+
 
 }
